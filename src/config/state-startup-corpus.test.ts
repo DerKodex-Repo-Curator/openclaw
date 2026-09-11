@@ -236,7 +236,18 @@ describe("prior-release state startup corpus", () => {
               { catalogMode: "static" },
             );
             try {
-              expect(lease.snapshot.modelCatalog.entries.length).toBeGreaterThan(0);
+              if (
+                [
+                  "provider-admission-bedrock.json",
+                  "provider-admission-family.json",
+                  "provider-admission-generic.json",
+                  "provider-admission-openai.json",
+                ].includes(configName)
+              ) {
+                expect(lease.snapshot.modelCatalog.entries).toEqual([]);
+              } else {
+                expect(lease.snapshot.modelCatalog.entries.length).toBeGreaterThan(0);
+              }
             } finally {
               lease.release();
             }

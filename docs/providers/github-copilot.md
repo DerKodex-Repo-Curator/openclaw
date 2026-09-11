@@ -313,6 +313,12 @@ configured default model is never replaced.
   </Accordion>
 
   <Accordion title="Environment variable resolution order">
+    `COPILOT_GITHUB_TOKEN` can enable Copilot directly. Generic `GH_TOKEN` and
+    `GITHUB_TOKEN` values require an explicit `models.providers["github-copilot"]`
+    entry or an existing Copilot auth profile before model requests or
+    authenticated discovery can use them. Selecting a model or enabling
+    discovery alone does not enable credential use.
+
     OpenClaw resolves Copilot auth from environment variables in the following
     priority order:
 
