@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import "../styles/base.css";
 import "../styles/chat/text.css";
+import "../styles/chat/grouped.css";
 
 const title = "A resolved session title long enough to need truncation in a narrow chat bubble";
 
@@ -66,7 +67,9 @@ describe("session link presentation", () => {
       document.body.append(host);
       const [titled, untitled] = host.querySelectorAll("a");
       expect(getComputedStyle(titled!).color).toBe(getComputedStyle(untitled!).color);
-      expect(getComputedStyle(titled!).display).toBe("inline-grid");
+      expect(getComputedStyle(titled!).display).toBe(
+        className === "chat-reply-attribution" ? "grid" : "inline-grid",
+      );
       expect(getComputedStyle(titled!.firstElementChild!).textOverflow).toBe("ellipsis");
     },
   );

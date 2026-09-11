@@ -150,7 +150,7 @@ describe("memory source temporal ranking", () => {
         openOpenClawAgentDatabase({ agentId: "main" }).db.exec(`
           DROP TABLE memory_index_chunks_fts;
           CREATE VIEW memory_index_chunks_fts AS
-            SELECT text, id, path, source, model, start_line, end_line FROM memory_index_chunks;
+            SELECT text, id, path, source, model, start_line, end_line FROM memory_index_chunks WHERE 0;
         `);
         manager = await fixture.getFreshManager(cfg, "cli");
         expect(manager.status().fts).toMatchObject({ enabled: true, available: false });
