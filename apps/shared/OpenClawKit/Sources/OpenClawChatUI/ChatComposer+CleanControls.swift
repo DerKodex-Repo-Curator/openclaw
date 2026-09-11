@@ -157,8 +157,8 @@ extension OpenClawChatComposer {
     private func cleanInlineModelPicker(compact: Bool) -> some View {
         let sections = self.viewModel.modelPickerSections
         return Menu {
-            if let notice = self.viewModel.modelAllowList?.message, !notice.isEmpty {
-                Text(verbatim: notice)
+            if let notice = self.viewModel.modelAllowListNotice {
+                Text(notice)
                     .font(OpenClawChatTypography.caption)
                 Divider()
             }
@@ -174,11 +174,9 @@ extension OpenClawChatComposer {
                     get: { self.viewModel.canonicalModelSelectionID },
                     set: { self.viewModel.selectModel($0) }))
             {
-                if self.viewModel.modelAllowList == nil {
-                    Text(self.viewModel.defaultModelLabel)
-                        .font(OpenClawChatTypography.captionSemiBold)
-                        .tag(OpenClawChatViewModel.defaultModelSelectionID)
-                }
+                Text(String(localized: "Reset session model"))
+                    .font(OpenClawChatTypography.captionSemiBold)
+                    .tag(OpenClawChatViewModel.defaultModelSelectionID)
                 if !sections.pinned.isEmpty {
                     Section("Pinned") {
                         self.cleanInlineModelOptions(sections.pinned)

@@ -690,7 +690,9 @@ public struct OpenClawChatMetadataCapabilities: Codable, Sendable, Equatable {
 }
 
 public struct OpenClawChatModelAllowList: Decodable, Sendable, Equatable {
-    public let message: String
+    public let hiddenCount: Int
+    public let settingsPath: String
+    public let selectedModelBlocked: Bool?
 }
 
 public struct OpenClawChatModelCatalogSnapshot: Sendable, Equatable {
