@@ -157,6 +157,11 @@ extension OpenClawChatComposer {
     private func cleanInlineModelPicker(compact: Bool) -> some View {
         let sections = self.viewModel.modelPickerSections
         return Menu {
+            if let notice = self.viewModel.modelAllowList?.message, !notice.isEmpty {
+                Text(verbatim: notice)
+                    .font(OpenClawChatTypography.caption)
+                Divider()
+            }
             if let target = self.viewModel.modelSelectionTargetDescription {
                 Text(target)
                     .font(OpenClawChatTypography.caption)
@@ -169,9 +174,11 @@ extension OpenClawChatComposer {
                     get: { self.viewModel.canonicalModelSelectionID },
                     set: { self.viewModel.selectModel($0) }))
             {
-                Text(self.viewModel.defaultModelLabel)
-                    .font(OpenClawChatTypography.captionSemiBold)
-                    .tag(OpenClawChatViewModel.defaultModelSelectionID)
+                if self.viewModel.modelAllowList == nil {
+                    Text(self.viewModel.defaultModelLabel)
+                        .font(OpenClawChatTypography.captionSemiBold)
+                        .tag(OpenClawChatViewModel.defaultModelSelectionID)
+                }
                 if !sections.pinned.isEmpty {
                     Section("Pinned") {
                         self.cleanInlineModelOptions(sections.pinned)
@@ -273,7 +280,8 @@ extension OpenClawChatComposer {
     private func cleanInlineModelOptions(_ models: [OpenClawChatModelChoice]) -> some View {
         ForEach(models) { model in
             let unavailable = self.viewModel.modelUnavailableDescription(model)
-            Text(verbatim: [model.displayLabel, unavailable].compactMap(\.self).joined(separator: " — "))
+            let defaultLabel = self.viewModel.isDefaultModel(model) ? String(localized: "Default") : nil
+            Text(verbatim: [model.displayLabel, defaultLabel, unavailable].compactMap(\.self).joined(separator: " — "))
                 .font(OpenClawChatTypography.captionSemiBold)
                 .tag(model.selectionID)
                 .disabled(unavailable != nil)

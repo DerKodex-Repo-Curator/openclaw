@@ -83,6 +83,13 @@ public enum OpenClawChatGatewayPayloadCodec {
         return decoded.models.map(self.modelChoice)
     }
 
+    public static func decodeModelAllowList(_ data: Data) throws -> OpenClawChatModelAllowList? {
+        struct ModelCatalog: Decodable {
+            let allowList: OpenClawChatModelAllowList?
+        }
+        return try JSONDecoder().decode(ModelCatalog.self, from: data).allowList
+    }
+
     public static func decodeChatMetadataModelChoices(_ data: Data) throws -> [OpenClawChatModelChoice] {
         struct ChatMetadataModels: Decodable {
             let models: [ModelChoice]?

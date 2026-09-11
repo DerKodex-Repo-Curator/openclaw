@@ -246,6 +246,23 @@ struct MacGatewayChatTransport: OpenClawChatGatewayTransport {
         }
     }
 
+    func loadModelCatalog(
+        sessionKey: String,
+        agentID: String?) async throws -> OpenClawChatModelCatalogSnapshot
+    {
+        let target = self.sessionTarget(for: sessionKey, overrideAgentID: agentID)
+        let base = OpenClawChatGatewayRequests.modelsList(agentID: target.agentID)
+        let request = OpenClawChatGatewayRequest(
+            method: base.method,
+            params: base.params.merging(["sessionKey": AnyCodable(target.sessionKey)]) { _, incoming in incoming },
+            timeoutMs: base.timeoutMs)
+        let data = try await self.connection.request(request)
+        return try OpenClawChatModelCatalogSnapshot(
+            choices: OpenClawChatGatewayPayloadCodec.decodeModelChoices(data),
+            availabilityIsSessionScoped: false,
+            allowList: OpenClawChatGatewayPayloadCodec.decodeModelAllowList(data))
+    }
+
     func acquireSwarmRouteLease() async -> OpenClawChatSwarmRouteLease? {
         guard let lease = await self.connection.captureServerLease() else { return nil }
         let transport = self

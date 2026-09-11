@@ -303,7 +303,8 @@ struct IOSGatewayChatTransport: OpenClawChatGatewayTransport {
             : OpenClawChatGatewayPayloadCodec.decodeModelChoices(response)
         return OpenClawChatModelCatalogSnapshot(
             choices: choices,
-            availabilityIsSessionScoped: sessionScoped)
+            availabilityIsSessionScoped: sessionScoped,
+            allowList: try OpenClawChatGatewayPayloadCodec.decodeModelAllowList(response))
     }
 
     func isSwarmEnabled(sessionKey: String) async throws -> Bool {

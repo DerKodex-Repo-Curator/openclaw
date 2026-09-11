@@ -84,9 +84,16 @@ extension OpenClawChatComposer {
             get: { self.viewModel.modelSelectionID },
             set: { next in self.viewModel.selectModel(next) }))
         {
-            Text(self.viewModel.defaultModelLabel)
-                .font(OpenClawChatTypography.captionSemiBold)
-                .tag(OpenClawChatViewModel.defaultModelSelectionID)
+            if let notice = self.viewModel.modelAllowList?.message, !notice.isEmpty {
+                Text(verbatim: notice)
+                    .font(OpenClawChatTypography.caption)
+                    .disabled(true)
+            }
+            if self.viewModel.modelAllowList == nil {
+                Text(self.viewModel.defaultModelLabel)
+                    .font(OpenClawChatTypography.captionSemiBold)
+                    .tag(OpenClawChatViewModel.defaultModelSelectionID)
+            }
             if !sections.pinned.isEmpty {
                 Section {
                     self.modelOptions(sections.pinned)

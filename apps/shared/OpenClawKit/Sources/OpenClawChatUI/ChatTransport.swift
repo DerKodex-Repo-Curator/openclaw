@@ -689,16 +689,23 @@ public struct OpenClawChatMetadataCapabilities: Codable, Sendable, Equatable {
     }
 }
 
+public struct OpenClawChatModelAllowList: Decodable, Sendable, Equatable {
+    public let message: String
+}
+
 public struct OpenClawChatModelCatalogSnapshot: Sendable, Equatable {
     public let choices: [OpenClawChatModelChoice]
     public let availabilityIsSessionScoped: Bool
+    public let allowList: OpenClawChatModelAllowList?
 
     public init(
         choices: [OpenClawChatModelChoice],
-        availabilityIsSessionScoped: Bool)
+        availabilityIsSessionScoped: Bool,
+        allowList: OpenClawChatModelAllowList? = nil)
     {
         self.choices = choices
         self.availabilityIsSessionScoped = availabilityIsSessionScoped
+        self.allowList = allowList
     }
 }
 
